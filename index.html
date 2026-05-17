@@ -673,7 +673,7 @@ function rose(x, y, sz, palette, rot, alpha){
   ctx.save();
   ctx.translate(x, y);
   ctx.rotate(rot || 0);
-  ctx.globalAlpha = Math.min(1, alpha || 1);
+  ctx.globalAlpha = 1;
 
   const p0 = palette[0], p1 = palette[1]||palette[0], p2 = palette[2]||palette[0];
 
@@ -698,11 +698,11 @@ function rose(x, y, sz, palette, rot, alpha){
     const pg = ctx.createLinearGradient(0, 0, 0, -sz*0.88);
     pg.addColorStop(0, darken(p0, 30));
     pg.addColorStop(0.4, p0);
-    pg.addColorStop(1, lighten(p1, 18));
+    pg.addColorStop(1, lighten(p1, 35));
     ctx.fillStyle = pg; ctx.fill();
     // crisp petal edge
     ctx.strokeStyle = darken(p0, 40);
-    ctx.lineWidth = 0.9;
+    ctx.lineWidth = 1.8;
     ctx.stroke();
     ctx.restore();
   }
@@ -718,10 +718,10 @@ function rose(x, y, sz, palette, rot, alpha){
     ctx.closePath();
     const mg = ctx.createLinearGradient(0, 0, 0, -sz*0.65);
     mg.addColorStop(0, darken(p1, 25));
-    mg.addColorStop(1, lighten(p1, 10));
+    mg.addColorStop(1, lighten(p1, 28));
     ctx.fillStyle = mg; ctx.fill();
     ctx.strokeStyle = darken(p1, 45);
-    ctx.lineWidth = 0.8;
+    ctx.lineWidth = 1.4;
     ctx.stroke();
     ctx.restore();
   }
@@ -736,7 +736,7 @@ function rose(x, y, sz, palette, rot, alpha){
     ctx.bezierCurveTo( sz*0.12, -sz*0.34,  sz*0.14, -sz*0.1, 0, 0);
     ctx.closePath();
     ctx.fillStyle = darken(p0, 20); ctx.fill();
-    ctx.strokeStyle = darken(p0, 50); ctx.lineWidth = 0.7; ctx.stroke();
+    ctx.strokeStyle = darken(p0, 50); ctx.lineWidth = 1.4; ctx.stroke();
     ctx.restore();
   }
 
@@ -746,7 +746,7 @@ function rose(x, y, sz, palette, rot, alpha){
   ctx.strokeStyle = darken(p0, 75); ctx.lineWidth = 1; ctx.stroke();
   // centre highlight
   ctx.beginPath(); ctx.arc(-sz*0.05, -sz*0.05, sz*0.06, 0, Math.PI*2);
-  ctx.fillStyle = 'rgba(255,235,210,0.55)'; ctx.fill();
+  ctx.fillStyle = 'rgba(255,245,230,0.95)'; ctx.fill();
 
   ctx.restore();
 }
@@ -847,8 +847,8 @@ function drawAllRoses(){
   const rEdge=cx+archR;
 
   // Base size for roses — fixed pixel size so they look good on all screens
-  const RS = Math.max(22, Math.min(W*0.075, 36)); // 22–36px per rose
-  const LS = Math.max(18, Math.min(W*0.055, 28)); // leaf size
+  const RS = Math.max(34, Math.min(W*0.11, 54)); // 22–36px per rose
+  const LS = Math.max(24, Math.min(W*0.07, 38)); // leaf size
   const BS = Math.max(14, Math.min(W*0.04,  20)); // blossom size
 
   // ── Left column ──
