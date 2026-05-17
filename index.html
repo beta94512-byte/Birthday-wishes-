@@ -196,7 +196,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   color:rgba(255,218,178,.2);
   text-transform:uppercase;
 }
-.bday-form input[type="date"]{
+.bday-form input[type="date","time"]{
   background:rgba(3,0,0,.94);
   border:1px solid rgba(205,155,38,.2);
   border-radius:30px;
@@ -208,11 +208,11 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   transition:border-color .45s,box-shadow .45s;
   min-width:180px;
 }
-.bday-form input[type="date"]:focus{
+.bday-form input[type="date","time"]:focus{
   border-color:rgba(205,155,38,.5);
   box-shadow:0 0 16px rgba(205,155,38,.14);
 }
-.bday-form input[type="date"]::-webkit-calendar-picker-indicator{
+.bday-form input[type="date","time"]::-webkit-calendar-picker-indicator{
   filter:invert(60%) sepia(55%) saturate(370%) hue-rotate(14deg);cursor:pointer;
 }
 
