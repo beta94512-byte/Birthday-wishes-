@@ -216,6 +216,76 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   filter:invert(60%) sepia(55%) saturate(370%) hue-rotate(14deg);cursor:pointer;
 }
 
+/* ══ TIME SETUP PANEL ══ */
+#timeSetup{
+  position:fixed;bottom:60px;left:50%;
+  transform:translateX(-50%);
+  z-index:11;
+  background:rgba(3,0,0,0.94);
+  border:1px solid rgba(205,155,38,.2);
+  border-radius:12px;
+  padding:12px 18px;
+  text-align:center;
+  display:none;
+  flex-direction:column;
+  gap:8px;
+  min-width:220px;
+}
+#timeSetup.active{
+  display:flex;
+}
+#timeSetup label{
+  font-family:'Raleway',sans-serif;
+  font-size:7px;
+  font-weight:300;
+  letter-spacing:.38em;
+  color:rgba(255,218,178,.35);
+  text-transform:uppercase;
+}
+#timeSetup input[type="datetime-local"]{
+  background:rgba(3,0,0,.94);
+  border:1px solid rgba(205,155,38,.2);
+  border-radius:6px;
+  padding:6px 10px;
+  color:#f0e2cc;
+  font-family:'Raleway',sans-serif;
+  font-size:8.5px;
+  cursor:pointer;
+  transition:border-color .45s,box-shadow .45s;
+}
+#timeSetup input[type="datetime-local"]:focus{
+  border-color:rgba(205,155,38,.5);
+  box-shadow:0 0 16px rgba(205,155,38,.14);
+}
+#timeSetup button{
+  background:rgba(205,155,38,.2);
+  border:1px solid rgba(205,155,38,.4);
+  color:#f0e2cc;
+  padding:6px 16px;
+  border-radius:6px;
+  cursor:pointer;
+  font-family:'Raleway',sans-serif;
+  font-size:7.5px;
+  font-weight:300;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  transition:all .38s ease;
+}
+#timeSetup button:hover{
+  background:rgba(205,155,38,.35);
+  border-color:rgba(205,155,38,.6);
+  box-shadow:0 0 12px rgba(205,155,38,.12);
+}
+#randomBtn{
+  background:rgba(215,12,48,.2);
+  border-color:rgba(215,12,48,.4);
+}
+#randomBtn:hover{
+  background:rgba(215,12,48,.35);
+  border-color:rgba(215,12,48,.6);
+  box-shadow:0 0 12px rgba(215,12,48,.12);
+}
+
 /* ══ REVEAL OVERLAY ══ */
 .reveal-overlay{
   position:fixed;inset:0;z-index:50;
@@ -329,14 +399,17 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   <label for="bdayInput">set birthday</label>
   <input type="date" id="bdayInput"/>
 </div>
+
 <div id="timeSetup">
+  <label for="targetInput">set countdown time (picks time of day, not just 12 am)</label>
   <input 
     type="datetime-local" 
     id="targetInput"
   >
-  <button onclick="startCountdown()">
-    Start Countdown
-  </button>
+  <div style="display:flex;gap:8px;justify-content:center;">
+    <button onclick="startCountdown()">Start Countdown</button>
+    <button id="randomBtn" onclick="setRandomDateTime()">Random Date & Time</button>
+  </div>
 </div>
 
 <div id="countdown"></div>
@@ -345,7 +418,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   <div class="reveal-card">
     <div class="reveal-title">Happy <em>Birthday,</em><br>my solace ♥</div>
     <div class="reveal-divline"></div>
-    <div class="reveal-sub">My Princess, my solace, wishing you all the peace prosperity and happiness in the world. Always be safe and healthy!! Love you my princess🎂🎂🎉🎊🎊💐🎁👑💝.</div>
+    <div class="reveal-sub">My Princess, my solace, wishing you all the peace prosperity and happiness in the world. Always be safe and healthy!! Love you my princess🎂🎂🎉🎊🎊💐🎁</div>
   </div>
   <div class="close-reveal" id="closeReveal">✦ &nbsp; close &nbsp; ✦</div>
 </div>
@@ -1000,87 +1073,96 @@ function drawChandelier(){
     ctx.fillStyle=flg; ctx.beginPath(); ctx.arc(0,-10*scale,22*scale,0,Math.PI*2); ctx.fill();
     ctx.restore();
   });
-
-  // centre drop rod
-  ctx.strokeStyle=cg; ctx.lineWidth=2*scale;
-  ctx.beginPath(); ctx.moveTo(0,50*scale); ctx.lineTo(0,88*scale); ctx.stroke();
-  // bottom ornament
-  ctx.beginPath(); ctx.ellipse(0,92*scale,5*scale,10*scale,0,0,Math.PI*2);
-  const og=ctx.createLinearGradient(-5*scale,82*scale,5*scale,102*scale);
-  og.addColorStop(0,'#ffe870'); og.addColorStop(1,'#8a5810');
-  ctx.fillStyle=og; ctx.fill();
-  // bottom candle
-  ctx.fillStyle='rgba(255,248,220,0.92)';
-  ctx.fillRect(-3.5*scale,102*scale,7*scale,14*scale);
-  ctx.save(); ctx.translate(0,100*scale);
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.bezierCurveTo(-4*scale,-7*scale,-2*scale,-16*scale,0,-20*scale);
-  ctx.bezierCurveTo(2*scale,-16*scale,4*scale,-7*scale,0,0);
-  ctx.fillStyle='rgba(255,220,80,0.95)'; ctx.fill();
-  const flg2=ctx.createRadialGradient(0,-10*scale,0,0,-10*scale,26*scale);
-  flg2.addColorStop(0,'rgba(255,230,120,0.38)'); flg2.addColorStop(1,'rgba(255,150,30,0)');
-  ctx.fillStyle=flg2; ctx.beginPath(); ctx.arc(0,-10*scale,26*scale,0,Math.PI*2); ctx.fill();
-  ctx.restore();
-
-  // overall chandelier warm glow
-  const chg=ctx.createRadialGradient(0,60*scale,0,0,60*scale,110*scale);
-  chg.addColorStop(0,'rgba(255,200,80,0.12)');
-  chg.addColorStop(1,'rgba(255,150,30,0)');
-  ctx.fillStyle=chg; ctx.beginPath(); ctx.arc(0,60*scale,110*scale,0,Math.PI*2); ctx.fill();
-
   ctx.restore();
 }
 
 // ─── VIGNETTE ──────────────────────────────────────────────────
 function drawVignette(){
-  // heavy corners
-  const vg=ctx.createRadialGradient(W/2,H*0.42,W*0.08,W/2,H*0.42,W*0.82);
+  const vg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.hypot(W,H)*0.5);
   vg.addColorStop(0,'rgba(0,0,0,0)');
-  vg.addColorStop(0.55,'rgba(0,0,0,0.15)');
-  vg.addColorStop(1,'rgba(0,0,0,0.82)');
+  vg.addColorStop(1,'rgba(0,0,0,0.35)');
   ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-
-  // top bar dark
-  const tg=ctx.createLinearGradient(0,0,0,H*0.06);
-  tg.addColorStop(0,'rgba(0,0,0,0.7)'); tg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=tg; ctx.fillRect(0,0,W,H*0.06);
 }
 
-// ─── INIT ──────────────────────────────────────────────────────
-resize();
+// ─── COUNTDOWN TIMER ───────────────────────────────────────────
+let countdownInterval;
 
-// ─── COUNTDOWN ─────────────────────────────────────────────────
-let targetDate=null;
-function getNextBirthday(v){
-  if(!v)return null;
-  const[,m,d]=v.split('-').map(Number);
-  const now=new Date();
-  let c=new Date(now.getFullYear(),m-1,d,0,0,0);
-  if(c<=now)c=new Date(now.getFullYear()+1,m-1,d,0,0,0);
-  return c;
+function setRandomDateTime(){
+  const today = new Date();
+  const randomDays = Math.floor(Math.random() * 365) - 182; // ±6 months
+  const randomDate = new Date(today);
+  randomDate.setDate(today.getDate() + randomDays);
+  
+  const randomHours = Math.floor(Math.random() * 24);
+  const randomMinutes = Math.floor(Math.random() * 60);
+  
+  const dateStr = randomDate.toISOString().slice(0, 10);
+  const timeStr = `${String(randomHours).padStart(2, '0')}:${String(randomMinutes).padStart(2, '0')}`;
+  
+  document.getElementById('bdayInput').value = dateStr;
+  document.getElementById('targetInput').value = `${dateStr}T${timeStr}`;
+  
+  document.getElementById('timeSetup').classList.add('active');
 }
-function fmt(ms){
-  if(ms<=0)return '🎂 Today! 🎂';
-  const s=Math.floor(ms/1000);
-  const d=Math.floor(s/86400),h=Math.floor((s%86400)/3600),m=Math.floor((s%3600)/60),sc=s%60;
-  return `${d}d  ${String(h).padStart(2,'0')}h  ${String(m).padStart(2,'0')}m  ${String(sc).padStart(2,'0')}s`;
+
+function showTimeSetup(){
+  const timeSetup = document.getElementById('timeSetup');
+  timeSetup.classList.add('active');
 }
-function tick(){
-  const el=document.getElementById('countdownDisplay');
-  if(!targetDate){el.textContent='set a birthday ↓';return;}
-  const diff=targetDate-new Date();
-  el.textContent=fmt(diff);
-  if(diff<=0)targetDate=getNextBirthday(document.getElementById('bdayInput').value);
+
+function startCountdown(){
+  const bdayInput = document.getElementById('bdayInput').value;
+  const targetInput = document.getElementById('targetInput').value;
+  
+  let targetDate;
+  
+  if(targetInput){
+    // If datetime-local is set, use that
+    targetDate = new Date(targetInput);
+  } else if(bdayInput){
+    // If only date is set, use that at midnight (full day countdown)
+    targetDate = new Date(bdayInput + 'T00:00:00');
+  } else {
+    alert('Please set a birthday or countdown time');
+    return;
+  }
+  
+  clearInterval(countdownInterval);
+  
+  function updateCountdown(){
+    const now = new Date().getTime();
+    const target = targetDate.getTime();
+    const distance = target - now;
+    
+    if(distance <= 0){
+      document.getElementById('countdownDisplay').textContent = 'IT\'S HERE! ♥';
+      document.getElementById('revealOverlay').classList.add('active');
+      clearInterval(countdownInterval);
+      return;
+    }
+    
+    const days = Math.floor(distance / (1000*60*60*24));
+    const hours = Math.floor((distance % (1000*60*60*24)) / (1000*60*60));
+    const minutes = Math.floor((distance % (1000*60*60)) / (1000*60));
+    const seconds = Math.floor((distance % (1000*60)) / 1000);
+    
+    document.getElementById('countdownDisplay').textContent = 
+      `${String(days).padStart(2, '0')} : ${String(hours).padStart(2, '0')} : ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
+  }
+  
+  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, 1000);
 }
-const saved=localStorage.getItem('bday_v3');
-if(saved){document.getElementById('bdayInput').value=saved;targetDate=getNextBirthday(saved);}
-document.getElementById('bdayInput').addEventListener('change',e=>{
-  localStorage.setItem('bday_v3',e.target.value);
-  targetDate=getNextBirthday(e.target.value);tick();
+
+// Event listeners
+document.getElementById('bdayInput').addEventListener('change', showTimeSetup);
+document.getElementById('orbBtn').addEventListener('click', showTimeSetup);
+document.getElementById('closeReveal').addEventListener('click', function(){
+  document.getElementById('revealOverlay').classList.remove('active');
 });
-setInterval(tick,1000);tick();
 
-document.getElementById('orbBtn').addEventListener('click',()=>document.getElementById('revealOverlay').classList.add('active'));
-document.getElementById('closeReveal').addEventListener('click',()=>document.getElementById('revealOverlay').classList.remove('active'));
+// Initialize
+resize();
 </script>
 </body>
 </html>
