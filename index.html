@@ -183,36 +183,46 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
     0 2px 6px rgba(0,0,0,.55);
 }
 
-/* ══ DATE SETTER ══ */
-.bday-form{
+/* ══ TIME SETUP FORM ══ */
+.time-setup-form{
   position:fixed;bottom:20px;left:50%;
   transform:translateX(-50%);z-index:11;
-  display:flex;flex-direction:column;align-items:center;gap:7px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  background:rgba(3,0,0,0.82);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(212,162,42,0.22);
+  border-radius:18px;
+  padding:20px 28px;
 }
-.bday-form label{
+
+.time-setup-form label{
   font-family:'Raleway',sans-serif;
-  font-size:6.5px;font-weight:300;
+  font-size:7px;font-weight:300;
   letter-spacing:.38em;
-  color:rgba(255,218,178,.2);
+  color:rgba(255,225,192,.38);
   text-transform:uppercase;
 }
-.bday-form input[type="date"]{
+
+.time-setup-form input[type="datetime-local"]{
   background:rgba(3,0,0,.94);
   border:1px solid rgba(205,155,38,.2);
   border-radius:30px;
-  padding:7px 20px;
+  padding:10px 20px;
   color:#f0e2cc;
   font-family:'Raleway',sans-serif;
-  font-size:9.5px;letter-spacing:.15em;
+  font-size:10px;letter-spacing:.15em;
   outline:none;text-align:center;cursor:pointer;
   transition:border-color .45s,box-shadow .45s;
-  min-width:180px;
+  min-width:240px;
 }
-.bday-form input[type="date"]:focus{
+
+.time-setup-form input[type="datetime-local"]:focus{
   border-color:rgba(205,155,38,.5);
   box-shadow:0 0 16px rgba(205,155,38,.14);
 }
-.bday-form input[type="date"]::-webkit-calendar-picker-indicator{
+
+.time-setup-form input[type="datetime-local"]::-webkit-calendar-picker-indicator{
   filter:invert(60%) sepia(55%) saturate(370%) hue-rotate(14deg);cursor:pointer;
 }
 
@@ -325,18 +335,13 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   </div>
 </div>
 
-<div class="bday-form">
-  <label for="bdayInput">set birthday</label>
-  <input type="date" id="bdayInput"/>
-</div>
-<div id="timeSetup">
+<div class="time-setup-form">
+  <label for="targetInput">SET DATE AND TIME</label>
   <input 
     type="datetime-local" 
     id="targetInput"
+    onchange="startCountdown()"
   >
-  <button onclick="startCountdown()">
-    Start Countdown
-  </button>
 </div>
 
 <div id="countdown"></div>
@@ -345,7 +350,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;}
   <div class="reveal-card">
     <div class="reveal-title">Happy <em>Birthday,</em><br>my solace ♥</div>
     <div class="reveal-divline"></div>
-    <div class="reveal-sub">My Princess, my solace, wishing you all the peace prosperity and happiness in the world. Always be safe and healthy!! Love you my princess🎂🎂🎉🎊🎊💐🎁👑💝.</div>
+    <div class="reveal-sub">My Princess, my solace, wishing you all the peace prosperity and happiness in the world. Always be safe and healthy!! Love you my princess🎂🎂🎉🎊🎊💐🎁💕</div>
   </div>
   <div class="close-reveal" id="closeReveal">✦ &nbsp; close &nbsp; ✦</div>
 </div>
@@ -1001,86 +1006,73 @@ function drawChandelier(){
     ctx.restore();
   });
 
-  // centre drop rod
-  ctx.strokeStyle=cg; ctx.lineWidth=2*scale;
-  ctx.beginPath(); ctx.moveTo(0,50*scale); ctx.lineTo(0,88*scale); ctx.stroke();
-  // bottom ornament
-  ctx.beginPath(); ctx.ellipse(0,92*scale,5*scale,10*scale,0,0,Math.PI*2);
-  const og=ctx.createLinearGradient(-5*scale,82*scale,5*scale,102*scale);
-  og.addColorStop(0,'#ffe870'); og.addColorStop(1,'#8a5810');
-  ctx.fillStyle=og; ctx.fill();
-  // bottom candle
-  ctx.fillStyle='rgba(255,248,220,0.92)';
-  ctx.fillRect(-3.5*scale,102*scale,7*scale,14*scale);
-  ctx.save(); ctx.translate(0,100*scale);
-  ctx.beginPath(); ctx.moveTo(0,0); ctx.bezierCurveTo(-4*scale,-7*scale,-2*scale,-16*scale,0,-20*scale);
-  ctx.bezierCurveTo(2*scale,-16*scale,4*scale,-7*scale,0,0);
-  ctx.fillStyle='rgba(255,220,80,0.95)'; ctx.fill();
-  const flg2=ctx.createRadialGradient(0,-10*scale,0,0,-10*scale,26*scale);
-  flg2.addColorStop(0,'rgba(255,230,120,0.38)'); flg2.addColorStop(1,'rgba(255,150,30,0)');
-  ctx.fillStyle=flg2; ctx.beginPath(); ctx.arc(0,-10*scale,26*scale,0,Math.PI*2); ctx.fill();
-  ctx.restore();
-
-  // overall chandelier warm glow
-  const chg=ctx.createRadialGradient(0,60*scale,0,0,60*scale,110*scale);
-  chg.addColorStop(0,'rgba(255,200,80,0.12)');
-  chg.addColorStop(1,'rgba(255,150,30,0)');
-  ctx.fillStyle=chg; ctx.beginPath(); ctx.arc(0,60*scale,110*scale,0,Math.PI*2); ctx.fill();
-
   ctx.restore();
 }
 
-// ─── VIGNETTE ──────────────────────────────────────────────────
 function drawVignette(){
-  // heavy corners
-  const vg=ctx.createRadialGradient(W/2,H*0.42,W*0.08,W/2,H*0.42,W*0.82);
+  const vg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.7);
   vg.addColorStop(0,'rgba(0,0,0,0)');
-  vg.addColorStop(0.55,'rgba(0,0,0,0.15)');
-  vg.addColorStop(1,'rgba(0,0,0,0.82)');
+  vg.addColorStop(1,'rgba(0,0,0,0.55)');
   ctx.fillStyle=vg; ctx.fillRect(0,0,W,H);
-
-  // top bar dark
-  const tg=ctx.createLinearGradient(0,0,0,H*0.06);
-  tg.addColorStop(0,'rgba(0,0,0,0.7)'); tg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=tg; ctx.fillRect(0,0,W,H*0.06);
 }
 
-// ─── INIT ──────────────────────────────────────────────────────
 resize();
 
-// ─── COUNTDOWN ─────────────────────────────────────────────────
-let targetDate=null;
-function getNextBirthday(v){
-  if(!v)return null;
-  const[,m,d]=v.split('-').map(Number);
-  const now=new Date();
-  let c=new Date(now.getFullYear(),m-1,d,0,0,0);
-  if(c<=now)c=new Date(now.getFullYear()+1,m-1,d,0,0,0);
-  return c;
-}
-function fmt(ms){
-  if(ms<=0)return '🎂 Today! 🎂';
-  const s=Math.floor(ms/1000);
-  const d=Math.floor(s/86400),h=Math.floor((s%86400)/3600),m=Math.floor((s%3600)/60),sc=s%60;
-  return `${d}d  ${String(h).padStart(2,'0')}h  ${String(m).padStart(2,'0')}m  ${String(sc).padStart(2,'0')}s`;
-}
-function tick(){
-  const el=document.getElementById('countdownDisplay');
-  if(!targetDate){el.textContent='set a birthday ↓';return;}
-  const diff=targetDate-new Date();
-  el.textContent=fmt(diff);
-  if(diff<=0)targetDate=getNextBirthday(document.getElementById('bdayInput').value);
-}
-const saved=localStorage.getItem('bday_v3');
-if(saved){document.getElementById('bdayInput').value=saved;targetDate=getNextBirthday(saved);}
-document.getElementById('bdayInput').addEventListener('change',e=>{
-  localStorage.setItem('bday_v3',e.target.value);
-  targetDate=getNextBirthday(e.target.value);tick();
-});
-setInterval(tick,1000);tick();
+// ─── COUNTDOWN LOGIC ───────────────────────────────────────────
+let targetTime = null;
+let countdownInterval = null;
 
-document.getElementById('orbBtn').addEventListener('click',()=>document.getElementById('revealOverlay').classList.add('active'));
-document.getElementById('closeReveal').addEventListener('click',()=>document.getElementById('revealOverlay').classList.remove('active'));
+function startCountdown(){
+  const input = document.getElementById('targetInput');
+  if(!input.value) return;
+  
+  targetTime = new Date(input.value).getTime();
+  if(!targetTime || targetTime <= Date.now()){
+    alert('Please select a future date and time');
+    return;
+  }
+
+  if(countdownInterval) clearInterval(countdownInterval);
+  updateCountdown();
+  countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown(){
+  if(!targetTime) return;
+  
+  const now = Date.now();
+  const diff = targetTime - now;
+
+  if(diff <= 0){
+    document.getElementById('countdownDisplay').textContent = '00 00 00 00';
+    clearInterval(countdownInterval);
+    document.getElementById('revealOverlay').classList.add('active');
+    return;
+  }
+
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+  const seconds = Math.floor((diff % (1000*60)) / 1000);
+
+  document.getElementById('countdownDisplay').textContent = 
+    `${String(days).padStart(2, '0')} ${String(hours).padStart(2, '0')} ${String(minutes).padStart(2, '0')} ${String(seconds).padStart(2, '0')}`;
+}
+
+// ─── REVEAL OVERLAY CLOSE ──────────────────────────────────────
+document.getElementById('closeReveal').addEventListener('click', ()=>{
+  document.getElementById('revealOverlay').classList.remove('active');
+  document.getElementById('targetInput').value = '';
+  document.getElementById('countdownDisplay').textContent = '-- -- -- --';
+  if(countdownInterval) clearInterval(countdownInterval);
+  targetTime = null;
+});
+
+// ─── ORB CLICK ─────────────────────────────────────────────────
+document.getElementById('orbBtn').addEventListener('click', ()=>{
+  document.getElementById('revealOverlay').classList.add('active');
+});
+
 </script>
 </body>
 </html>
